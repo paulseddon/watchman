@@ -1,0 +1,47 @@
+@(lb: Seq[com.amazonaws.services.elasticloadbalancing.model.LoadBalancerDescription], region: String)
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <img src="/assets/images/aws/Compute & Networking_Elastic Load Balancing.svg" class="aws-svg">
+        Load Balancers
+    </div>
+
+    @if(lb.isEmpty) {
+        <div class="panel-body">
+            <strong>No load balancers!</strong>
+        </div>
+    } else {
+        @for(l <- lb) {
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <span class="label label-info">@l.getLoadBalancerName</span>
+                    <span class="badge">@l.getInstances.size()</span>
+                    <button type="button" class="btn btn-default btn-xs" data-toggle="popover" data-content="@l.getHealthCheck.getTarget">
+                        <span class="glyphicon glyphicon-heart"></span>
+                    </button>
+                </div>
+                <div class="col-sm-12">
+                    <small>
+                        @l.getScheme |
+                        @for(ld <- l.getListenerDescriptions) {
+                            <a href="@ld.getListener.getProtocol://@l.getDNSName:@ld.getListener.getLoadBalancerPort" target="_blank">
+                                @ld.getListener.getLoadBalancerPort
+                                (@ld.getListener.getProtocol)
+                            </a>
+                            @Html("->")
+                            @ld.getListener.getInstancePort
+                            (@ld.getListener.getInstanceProtocol)
+                        } |
+                        <a href="https://console.aws.amazon.com/cloudwatch/home?region=@region#metrics:graph=!D03!E07!ET4!MN5!NS2!PD1!SS6!ST0!VA-PT12H~60~AWS%252FELB~LoadBalancerName~P0D~RequestCount~Sum~@l.getLoadBalancerName" target="_blank">Requests</a> |
+                        <a href="https://console.aws.amazon.com/cloudwatch/home?region=@region#metrics:graph=!AX~11!D08-5!E010-5!ET9!MN7~6~3~4~5!NS2-5!PD1-5!SS12-5!ST0!VA-PT12H1M~300~AWS%252FELB~HTTPCode_Backend_2XX~HTTPCode_Backend_3XX~HTTPCode_Backend_4XX~HTTPCode_ELB_4XX~HTTPCode_ELB_5XX~LoadBalancerName~P0D~@l.getLoadBalancerName~RIGHT~Sum" target="_blank">Http</a>
+                    </small>
+                </div>
+                @for(i <- l.getInstances) {
+                    <div class="col-sm-1">
+                        <span class="label label-default">@i.getInstanceId</span>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>

@@ -1,0 +1,56 @@
+@(clusters: Map[_ <: com.amazonaws.services.ecs.model.Cluster, Seq[com.amazonaws.services.ecs.model.ContainerInstance]])
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <img src="/assets/images/aws/Compute & Networking_Amazon EC2 AMI.svg" class="aws-svg">
+        EC2 Container Service
+    </div>
+
+    @if(clusters.isEmpty) {
+        <div class="panel-body">
+            <strong>No clusters!</strong>
+        </div>
+    } else {
+        @for((c, cis) <- clusters) {
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <span class="label label-@views.Util.statusToModifier(c.getStatus)">@c.getClusterName</span>
+                    <span class="badge">@cis.length</span>
+                    <button type="button" class="btn btn-default btn-xs" data-toggle="popover" data-content="@c.getClusterArn">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                    </button>
+                </div>
+
+                @for(ci <- cis) {
+                    <div class="col-sm-2">
+                        <span class="label label-@views.Util.statusToModifier(ci.getStatus)">@ci.getEc2InstanceId</span>
+
+                        @if(ci.getAgentConnected) {
+                            <span class="glyphicon glyphicon-transfer text-success"></span>
+                        } else {
+                            <span class="glyphicon glyphicon-transfer text-danger"></span>
+                        }
+
+                        <div>
+                            <span class="small">CPU</span>
+                            <div class="progress" style="margin-bottom : 0 px ;">
+                                <div class="progress-bar progress-bar-info" role="progressbar" style="width : @views.Util.usedResource(ci, "CPU") %">
+                                    @views.Util.usedResource(ci, "CPU")%
+                                </div>
+                            </div>
+
+                            <span class="small">Memory</span>
+                            <div class="progress" style="margin-bottom : 0 px ;">
+                                <div class="progress-bar progress-bar-info" role="progressbar" style="width : @views.Util.usedResource(ci, "MEMORY") %">
+                                    @views.Util.usedResource(ci, "MEMORY")%
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        }
+    }
+
+</div>

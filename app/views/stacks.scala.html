@@ -1,0 +1,31 @@
+@(name: String, region: String, info: String, envRequestForm: Form[_root_.controllers.Application.EnvRequest], stacks: Seq[_root_.com.amazonaws.services.cloudformation.model.Stack])
+
+@import _root_.views.html.helper._
+
+@main(name, region) {
+
+    <div class="row">
+        @if(info.nonEmpty) {
+            <div class="alert alert-warning ">
+                <strong>@info</strong>
+            </div>
+        }
+        <div class="col-xs-12">
+        @helper.form(action = routes.Application.createStack()) {
+            @select(envRequestForm("stackType"), Seq(("test" -> "test"), ("qa" -> "qa"), ("prod" -> "prod")))
+            @inputText(envRequestForm("stackName"))
+            @checkbox(envRequestForm("enableAlarms"))
+            @inputText(envRequestForm("notificationEmail"))
+            <input type="submit" value="Create"/>
+        }
+        </div>
+        <div class="col-xs-12">
+            @*put this into a new template!*@
+            @for(s <- stacks) {
+                <div>
+                @s
+                </div>
+            }
+        </div>
+    </div>
+}

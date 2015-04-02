@@ -1,0 +1,41 @@
+@(scaling: Seq[com.amazonaws.services.autoscaling.model.AutoScalingGroup], region: String)
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <img src="/assets/images/aws/Compute & Networking_Auto Scaling.svg" class="aws-svg">
+        Auto Scaling Groups
+    </div>
+
+    @if(scaling.isEmpty) {
+        <div class="panel-body">
+            <strong>No auto scaling groups!</strong>
+        </div>
+    } else {
+        @for(s <- scaling) {
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <span class="label label-info">@s.getAutoScalingGroupName</span>
+                    <span class="badge">@s.getInstances.size</span>
+                    <button type="button" class="btn btn-default btn-xs" data-toggle="popover" data-content="@s.getAutoScalingGroupARN">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                    </button>
+                    <button type="button" class="btn btn-default btn-xs" data-toggle="popover" data-content="@s.getTags.map(t => t.getKey + "=" + t.getValue).mkString(", ")">
+                        <span class="glyphicon glyphicon-tags"></span>
+                    </button>
+                </div>
+                <div class="col-sm-12">
+                    <small>
+                        Min: @s.getMinSize Max: @s.getMaxSize |
+                        <a href="https://console.aws.amazon.com/cloudwatch/home?region=@region#metrics:graph=!D03!E07!ET6!MN5!NS2!PD1!SS4!ST0!VA-PT12H~60~AWS%252FEC2~AutoScalingGroupName~Average~CPUUtilization~P0D~@s.getAutoScalingGroupName" target="_blank">CPU</a>
+                    </small>
+                </div>
+                @for(i <- s.getInstances) {
+                    <div class="col-sm-1">
+                        <span class="label label-@views.Util.statusToModifier(i.getHealthStatus)">@i.getInstanceId</span>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>

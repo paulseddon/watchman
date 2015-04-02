@@ -1,0 +1,28 @@
+@(name: String, region: String, dashboard: Dashboard)
+
+
+@main(name, region) {
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+        @autoScaling(dashboard.autoScaling, region)
+        </div>
+        <div class="col-xs-12 col-md-6">
+        @elasticLoadBalancing(dashboard.elasticLoadBalancing, region)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+        @cloudFormation(dashboard.cloudFormation)
+        </div>
+        <div class="col-xs-12 col-md-6">
+        @ec2ContainerService(dashboard.ec2ContainerService)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+        @route53(dashboard.route53)
+        </div>
+    </div>
+}

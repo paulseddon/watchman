@@ -1,0 +1,41 @@
+@(stacks: Seq[com.amazonaws.services.cloudformation.model.Stack])
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <img src="/assets/images/aws/Deployment & Management_AWS CloudFormation Stack.svg" class="aws-svg">
+        CloudFormation
+    </div>
+
+    @if(stacks.isEmpty) {
+        <div class="panel-body">
+            <strong>No stacks!</strong>
+        </div>
+    } else {
+        @for(s <- stacks) {
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <span class="label label-@views.Util.statusToModifier(s.getStackStatus)">@s.getStackName</span>
+                    <button type="button" class="btn btn-default btn-xs" data-toggle="popover" data-content="@s.getStackId">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                    </button>
+                </div>
+                @if(!s.getParameters.isEmpty) {
+                    <div class="col-sm-12">
+                        <span class="label label-default">Parameters</span>
+                        <small>
+                        @s.getParameters.map(p => p.getParameterKey + "=" + p.getParameterValue).mkString(" | ")
+                        </small>
+                    </div>
+                }
+                @if(!s.getOutputs.isEmpty) {
+                    <div class="col-sm-12">
+                        <span class="label label-default">Outputs</span>
+                        <small>
+                        @s.getOutputs.map(o => o.getOutputKey + "=" + o.getOutputValue).mkString(" | ")
+                        </small>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>

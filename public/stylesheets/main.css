@@ -1,0 +1,15 @@
+.navbar-brand {
+    padding: 3px;
+}
+
+.panel-heading {
+    padding: 3px 5px;
+}
+
+.aws-svg {
+    height: 30px;width: 30px
+}
+
+.aws-svg-lg {
+    height: 45px;width: 45px
+}
