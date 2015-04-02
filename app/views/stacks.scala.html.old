@@ -1,4 +1,4 @@
-@(name: String, region: String, info: String, envRequestForm: Form[_root_.controllers.Application.EnvRequest], stacks: Seq[_root_.com.amazonaws.services.cloudformation.model.Stack])
+@(name: String, region: String, info: String, envRequestForm: Form[_root_.controllers.Watchman.EnvRequest], stacks: Seq[_root_.com.amazonaws.services.cloudformation.model.Stack])
 
 @import _root_.views.html.helper._
 
@@ -11,7 +11,7 @@
             </div>
         }
         <div class="col-xs-12">
-        @helper.form(action = routes.Application.createStack()) {
+        @helper.form(action = routes.Watchman.createStack()) {
             @select(envRequestForm("stackType"), Seq(("test" -> "test"), ("qa" -> "qa"), ("prod" -> "prod")))
             @inputText(envRequestForm("stackName"))
             @checkbox(envRequestForm("enableAlarms"))

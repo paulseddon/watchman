@@ -1,6 +1,6 @@
-name := """aws-dashboard"""
+name := """watchman"""
 
-version := "1.0-SNAPSHOT"
+version := "0.1-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
@@ -17,4 +17,4 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.3.9"
 )
 
-unmanagedResourceDirectories in Compile <+= baseDirectory( _ / "aws")
+//unmanagedResourceDirectories in Compile <+= baseDirectory( _ / "aws")
